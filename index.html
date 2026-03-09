@@ -3,11 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Readmission Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <title>My Webpage</title>
 </head>
 <body>
-    <h1>Welcome to My Webpage</h1>
+    <header>
+        <h1>Patient Readmission Dashboard</h1>
+    </header>
+    <section id="slicers">
+        <h2>Slicers</h2>
+        <label for="age-slicer">Age:</label>
+        <select id="age-slicer">
+            <option value="all">All</option>
+            <option value="under-30">Under 30</option>
+            <option value="30-60">30 to 60</option>
+            <option value="over-60">Over 60</option>
+        </select>
+        <label for="gender-slicer">Gender:</label>
+        <select id="gender-slicer">
+            <option value="all">All</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+    </section>
+    <section id="kpi-cards">
+        <h2>KPI Cards</h2>
+        <div class="kpi-card">
+            <h3>Total Readmissions</h3>
+            <p id="total-readmissions">0</p>
+        </div>
+        <div class="kpi-card">
+            <h3>Readmission Rate</h3>
+            <p id="readmission-rate">0%</p>
+        </div>
+    </section>
+    <section id="charts">
+        <h2>Charts</h2>
+        <div id="readmission-chart"></div>
+        <div id="comparison-chart"></div>
+    </section>
     <script src="script.js"></script>
 </body>
 </html>
