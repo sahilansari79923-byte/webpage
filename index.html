@@ -4,44 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Readmission Dashboard</title>
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Patient Readmission Dashboard</h1>
-    </header>
-    <section id="slicers">
-        <h2>Slicers</h2>
-        <label for="age-slicer">Age:</label>
-        <select id="age-slicer">
-            <option value="all">All</option>
-            <option value="under-30">Under 30</option>
-            <option value="30-60">30 to 60</option>
-            <option value="over-60">Over 60</option>
-        </select>
-        <label for="gender-slicer">Gender:</label>
-        <select id="gender-slicer">
-            <option value="all">All</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-        </select>
-    </section>
-    <section id="kpi-cards">
-        <h2>KPI Cards</h2>
+
+    <h1>Hospital Patient Readmission Dashboard</h1>
+
+    <!-- SLICERS ROW -->
+    <div class="slicers-container">
+        <div class="slicer-box">
+            <div class="slicer-title">GENDER</div>
+            <select class="slicer-dropdown" id="slicerGender" onchange="updateDashboard()">
+                <option value="All">All</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+            </select>
+        </div>
+        <div class="slicer-box">
+            <div class="slicer-title">RACE</div>
+            <select class="slicer-dropdown" id="slicerRace" onchange="updateDashboard()">
+                <option value="All">All</option>
+                <option value="Caucasian">Caucasian</option>
+                <option value="AfricanAmerican">AfricanAmerican</option>
+                <option value="Hispanic">Hispanic</option>
+                <option value="Asian">Asian</option>
+            </select>
+        </div>
+        <div class="slicer-box">
+            <div class="slicer-title">AGE GROUP</div>
+            <select class="slicer-dropdown" id="slicerAge" onchange="updateDashboard()">
+                <option value="All">All</option>
+                <option value="70-90+">70-90+</option>
+                <option value="50-70">50-70</option>
+                <option value="30-50">30-50</option>
+                <option value="0-30">0-30</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- KPI ROW -->
+    <div class="kpi-container">
         <div class="kpi-card">
-            <h3>Total Readmissions</h3>
-            <p id="total-readmissions">0</p>
+            <div class="kpi-title">Total Patients</div>
+            <div class="kpi-value">101,766</div>
         </div>
         <div class="kpi-card">
-            <h3>Readmission Rate</h3>
-            <p id="readmission-rate">0%</p>
+            <div class="kpi-title">Early Readmissions</div>
+            <div class="kpi-value">11,357</div>
         </div>
-    </section>
-    <section id="charts">
-        <h2>Charts</h2>
-        <div id="readmission-chart"></div>
-        <div id="comparison-chart"></div>
-    </section>
+        <div class="kpi-card">
+            <div class="kpi-title">Readmission Rate</div>
+            <div class="kpi-value">11.2%</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Avg Hospital Days</div>
+            <div class="kpi-value">4.4</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Avg Medications</div>
+            <div class="kpi-value">16.0</div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div class="dashboard-grid">
+        <div class="chart-card">
+            <div class="chart-title">Readmission Breakdown</div>
+            <div class="chart-container"><canvas id="donutChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Early Readmission Rate by Age (%)</div>
+            <div class="chart-container"><canvas id="ageChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Readmission Rate by Race (%)</div>
+            <div class="chart-container"><canvas id="raceChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Rate by Insulin Usage (%)</div>
+            <div class="chart-container"><canvas id="insulinChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Rate by A1C Result (%)</div>
+            <div class="chart-container"><canvas id="a1cChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Avg Hospital Stay (Days)</div>
+            <div class="chart-container"><canvas id="hospChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Patient Volume & Risk by No. of Diagnoses</div>
+            <div class="chart-container"><canvas id="diagChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Rate by Medications (%)</div>
+            <div class="chart-container"><canvas id="medsChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- KEY INSIGHTS -->
+    <div class="insights-bar">
+        <div class="insight-item insight-1">
+            🔴 <strong>RISK ALERT:</strong> Patients 70-90 years old have 10%+ readmission rate — 25% higher than average.
+        </div>
+        <div class="insight-item insight-2">
+            🟠 <strong>CLINICAL FLAG:</strong> Patients with decreasing insulin dose have highest readmission: 10.3%.
+        </div>
+        <div class="insight-item insight-3">
+            🟡 <strong>GAP IDENTIFIED:</strong> 58k patients never given an A1C test — yet show 8.9% readmission rate.
+        </div>
+        <div class="insight-item insight-4">
+            🟢 <strong>MEDICATIONS:</strong> More medications = higher risk: 10.2% for 21+ meds vs 5.8% for 1-5 meds.
+        </div>
+        <div class="insight-item insight-5">
+            🔵 <strong>DIAGNOSES:</strong> Each additional diagnosis adds ~0.8% to readmission risk.
+        </div>
+    </div>
+
+    <div class="footer">
+        Data Source: UCI Diabetes 130-US Hospitals Dataset | Built with HTML & Chart.js
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
